@@ -161,7 +161,14 @@ if __name__ == '__main__':
     # obj = VcentTools('10.22.14.130', 'administrator@vsphere.local', '1qaz@WSX')
     # print obj.host_ip,obj.password,obj.user,obj.esxi_version()
     # 查询教室虚拟机
-    query_vm = '''SELECT  b.vm_name from hj_dg a INNER JOIN hj_vm b on a.id = b.dg_id WHERE b.vm_type = 1 '''
+    query_vm = '''  SELECT  b.vm_name 
+                    from hj_dg a 
+                    INNER JOIN hj_vm b on a.id = b.dg_id 
+                    WHERE b.vm_type = 1 and b.vm_name not like "webapp%" 
+                    union 
+                    SELECT vm_name 
+                    from hj_vm
+                    WHERE vm_name LIKE "WN%" OR vm_name LIKE "VT%" and del_flag=0 '''
     # 查询虚拟机信息
     p = Class_VM(cf.get('hj_db', 'db_host'), cf.get('hj_db', 'db_user'), cf.get('hj_db', 'db_pwd'),
                  cf.getint('hj_db', 'db_port'), cf.get('hj_db', 'db'), 'utf8')
